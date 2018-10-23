@@ -1,0 +1,70 @@
+<div class="draggable-list" ...attributes>
+  {{#if isGroupedList}}
+    {{#each-in @items as |group groupItems|}}
+      <div class="draggable-list-group">
+        {{group}}
+      </div>
+      <DropTarget
+        @isActive={{and (eq dropTarget -1) (eq groupTarget group)}}
+      />
+      {{#each groupItems as |item index|}}
+        {{#draggable-list/item
+          index=index
+          events=events
+          activeIndex=activeIndex
+          group=group
+          activeGroup=activeGroup
+        }}
+          {{yield item}}
+        {{/draggable-list/item}}
+        <DropTarget
+          @isActive={{and (eq dropTarget index) (eq groupTarget group)}}
+        />
+      {{else}}
+        {{#draggable-list/item
+          index=0
+          events=events
+          activeIndex=activeIndex
+          group=group
+          activeGroup=activeGroup
+        }}
+          Empty List
+        {{/draggable-list/item}}
+      {{/each}}
+    {{/each-in}}
+    {{#if (not (is-empty activeIndex))}}
+      <div
+        class="draggable-list-item active"
+        style={{style}} {{! template-lint-disable no-inline-styles }}
+      >
+        {{yield (get (get items activeGroup) activeIndex)}}
+      </div>
+    {{/if}}
+  {{else}}
+    {{#each @items as |item index|}}
+      {{#if (eq index 0)}}
+        <DropTarget
+          @isActive={{eq dropTarget -1}}
+        />
+      {{/if}}
+      {{#draggable-list/item
+        index=index
+        events=events
+        activeIndex=activeIndex
+      }}
+        {{yield item}}
+      {{/draggable-list/item}}
+      <DropTarget
+        @isActive={{eq dropTarget index}}
+      />
+    {{/each}}
+    {{#if (not (is-empty activeIndex))}}
+      <div
+        class="draggable-list-item active"
+        style={{style}} {{! template-lint-disable no-inline-styles }}
+      >
+        {{yield (get items activeIndex)}}
+      </div>
+    {{/if}}
+  {{/if}}
+</div>

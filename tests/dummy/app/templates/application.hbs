@@ -1,3 +1,11 @@
-<h2 id="title">Welcome to Ember</h2>
+
 
 {{outlet}}
+<DraggableList style="position:relative;" @onChange={{action "didChange"}} @items={{listItems}} as |list|>
+  {{list.id}} - {{list.text}}
+</DraggableList>
+<p></p>
+<DraggableList style="position:relative;" @onChange={{action "didChangeGroup"}} @items={{groupItems}} as |list group|>
+  {{group}}
+  {{list.id}}{{list.text}}
+</DraggableList>

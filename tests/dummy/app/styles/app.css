@@ -1,0 +1,26 @@
+.draggable-list {
+  width: 500px;
+  margin:20px;
+  border: 1px solid grey;
+}
+
+.draggable-list-item {
+  background: rgba(100,0,255, 0.4);
+  border: 2px solid rgba(100,0,255, 0.8);
+  padding:10px;
+  margin:20px;
+  width:calc(100% - 60px);
+}
+
+.drop-target {
+  display: block;
+  height:1px;
+}
+.drop-target.active {
+  height:20px;
+  background: red;
+}
+
+.ghost {
+  opacity: 0.2;
+}
