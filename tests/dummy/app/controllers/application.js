@@ -22,7 +22,8 @@ export default Controller.extend({
       ghjk: [
         { id: 3, text: 'baz' },
         { id: 4, text: 'bam' }
-      ]
+      ],
+      qwerty: []
     });
   },
 

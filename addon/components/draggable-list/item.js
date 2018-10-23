@@ -11,6 +11,7 @@ export default Component.extend({
   activeIndex: false,
   group: null,
   activeGroup: null,
+  inactive: false,
 
   isDragging: computed('index', 'activeIndex', 'group', 'activeGroup', {
     get() {
@@ -19,6 +20,10 @@ export default Component.extend({
   }),
 
   mouseDown(event) {
+    if (this.inactive) {
+      return;
+    }
+
     event.preventDefault();
 
     this.events.trigger(EVENT_ITEM_GRAB, this.index, this.element, this.group);

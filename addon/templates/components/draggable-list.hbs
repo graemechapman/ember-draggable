@@ -1,34 +1,39 @@
 <div class="draggable-list" ...attributes>
   {{#if isGroupedList}}
-    {{#each-in @items as |group groupItems|}}
-      <div class="draggable-list-group">
-        {{group}}
-      </div>
+    {{#each-in @items as |groupName groupItems|}}
+      {{yield (hash
+        group=(component 'draggable-list/content' content=groupName)
+      )}}
       <DropTarget
-        @isActive={{and (eq dropTarget -1) (eq groupTarget group)}}
+        @isActive={{and (eq dropTarget -1) (eq groupTarget groupName)}}
       />
-      {{#each groupItems as |item index|}}
+      {{#each groupItems as |itemData index|}}
         {{#draggable-list/item
           index=index
           events=events
           activeIndex=activeIndex
-          group=group
+          group=groupName
           activeGroup=activeGroup
         }}
-          {{yield item}}
+          {{yield (hash
+            item=(component 'draggable-list/content' content=itemData)
+          )}}
         {{/draggable-list/item}}
         <DropTarget
-          @isActive={{and (eq dropTarget index) (eq groupTarget group)}}
+          @isActive={{and (eq dropTarget index) (eq groupTarget groupName)}}
         />
       {{else}}
         {{#draggable-list/item
           index=0
           events=events
           activeIndex=activeIndex
-          group=group
+          group=groupName
           activeGroup=activeGroup
+          inactive=true
         }}
-          Empty List
+        {{yield (hash
+          placeholder=(component 'draggable-list/content')
+        )}}
         {{/draggable-list/item}}
       {{/each}}
     {{/each-in}}
@@ -37,11 +42,13 @@
         class="draggable-list-item active"
         style={{style}} {{! template-lint-disable no-inline-styles }}
       >
-        {{yield (get (get items activeGroup) activeIndex)}}
+        {{yield (hash
+          item=(component 'draggable-list/content' content=(get (get items activeGroup) activeIndex))
+        )}}
       </div>
     {{/if}}
   {{else}}
-    {{#each @items as |item index|}}
+    {{#each @items as |itemData index|}}
       {{#if (eq index 0)}}
         <DropTarget
           @isActive={{eq dropTarget -1}}
@@ -52,7 +59,9 @@
         events=events
         activeIndex=activeIndex
       }}
-        {{yield item}}
+        {{yield (hash
+          item=(component 'draggable-list/content' content=itemData)
+        )}}
       {{/draggable-list/item}}
       <DropTarget
         @isActive={{eq dropTarget index}}
@@ -63,7 +72,10 @@
         class="draggable-list-item active"
         style={{style}} {{! template-lint-disable no-inline-styles }}
       >
-        {{yield (get items activeIndex)}}
+
+        {{yield (hash
+          item=(component 'draggable-list/content' content=(get items activeIndex))
+        )}}
       </div>
     {{/if}}
   {{/if}}
