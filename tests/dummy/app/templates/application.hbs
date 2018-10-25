@@ -5,16 +5,25 @@
   {{#list.item as |item|}}
     {{item.id}} - {{item.text}}
   {{/list.item}}
+  {{#list.target as |item|}}
+    {{item.id}} - {{item.text}}
+  {{/list.target}}
 </DraggableList>
 <p></p>
+
 <DraggableList style="position:relative;" @onChange={{action "didChangeGroup"}} @items={{groupItems}} as |list|>
   {{#list.group as |group|}}
-    {{group}}
+    Group {{group}}
   {{/list.group}}
   {{#list.placeholder class="placeholder"}}
-    no Data
+    No Data
   {{/list.placeholder}}
   {{#list.item as |item|}}
-    {{item.id}} - {{item.text}}
+    <div>
+      {{item.id}} - {{item.text}}
+    </div>
   {{/list.item}}
+  {{#list.target as |item|}}
+    {{item.id}} - {{item.text}}
+  {{/list.target}}
 </DraggableList>

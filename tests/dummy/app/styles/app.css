@@ -11,14 +11,17 @@
   margin:20px;
   width:calc(100% - 60px);
 }
-
-.drop-target {
-  display: block;
-  height:1px;
+.draggable-list-item.active {
+  opacity: 0.5;
+  filter: hue-rotate(180deg);
 }
-.drop-target.active {
-  height:20px;
-  background: red;
+
+.target {
+  background: rgba(255,0,100, 0.4);
+  border: 2px solid rgba(255,0,100, 0.8);
+  padding:10px;
+  margin:20px;
+  width:calc(100% - 60px);
 }
 
 .ghost {

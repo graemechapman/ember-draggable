@@ -5,8 +5,12 @@
         group=(component 'draggable-list/content' content=groupName)
       )}}
       <DropTarget
-        @isActive={{and (eq dropTarget -1) (eq groupTarget groupName)}}
-      />
+        @isVisible={{and (eq dropTarget -1) (eq groupTarget groupName)}}
+      >
+        {{yield (hash
+          target=(component 'draggable-list/content' class="target" content=(get (get items activeGroup) activeIndex))
+        )}}
+      </DropTarget>
       {{#each groupItems as |itemData index|}}
         {{#draggable-list/item
           index=index
@@ -16,12 +20,16 @@
           activeGroup=activeGroup
         }}
           {{yield (hash
-            item=(component 'draggable-list/content' content=itemData)
+            item=(component 'draggable-list/content' class="dragging" content=itemData)
           )}}
         {{/draggable-list/item}}
         <DropTarget
-          @isActive={{and (eq dropTarget index) (eq groupTarget groupName)}}
-        />
+          @isVisible={{and (eq dropTarget index) (eq groupTarget groupName)}}
+        >
+          {{yield (hash
+            target=(component 'draggable-list/content' class="target" content=(get (get items activeGroup) activeIndex))
+          )}}
+        </DropTarget>
       {{else}}
         {{#draggable-list/item
           index=0
@@ -43,7 +51,7 @@
         style={{style}} {{! template-lint-disable no-inline-styles }}
       >
         {{yield (hash
-          item=(component 'draggable-list/content' content=(get (get items activeGroup) activeIndex))
+          item=(component 'draggable-list/content' class="dragging" content=(get (get items activeGroup) activeIndex))
         )}}
       </div>
     {{/if}}
@@ -51,8 +59,12 @@
     {{#each @items as |itemData index|}}
       {{#if (eq index 0)}}
         <DropTarget
-          @isActive={{eq dropTarget -1}}
-        />
+          @isVisible={{eq dropTarget -1}}
+        >
+          {{yield (hash
+            target=(component 'draggable-list/content' class="target" content=(get (get items activeGroup) activeIndex))
+          )}}
+        </DropTarget>
       {{/if}}
       {{#draggable-list/item
         index=index
@@ -60,12 +72,16 @@
         activeIndex=activeIndex
       }}
         {{yield (hash
-          item=(component 'draggable-list/content' content=itemData)
+          item=(component 'draggable-list/content' class="dragging" content=itemData)
         )}}
       {{/draggable-list/item}}
       <DropTarget
-        @isActive={{eq dropTarget index}}
-      />
+        @isVisible={{eq dropTarget index}}
+      >
+        {{yield (hash
+          target=(component 'draggable-list/content' class="target" content=(get items activeIndex))
+        )}}
+      </DropTarget>
     {{/each}}
     {{#if (not (is-empty activeIndex))}}
       <div
@@ -74,7 +90,7 @@
       >
 
         {{yield (hash
-          item=(component 'draggable-list/content' content=(get items activeIndex))
+          item=(component 'draggable-list/content' class="dragging" content=(get items activeIndex))
         )}}
       </div>
     {{/if}}

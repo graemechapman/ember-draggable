@@ -32,8 +32,7 @@ export default Controller.extend({
       return this.set('listItems', items);
     },
     didChangeGroup(items) {
-      this.set('groupItems', Object.assign({}, items));
-      this.notifyPropertyChange('groupItems');
+      this.set('groupItems', items);
     }
   }
 });
