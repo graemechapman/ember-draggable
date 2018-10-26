@@ -18,6 +18,8 @@
           activeIndex=activeIndex
           group=groupName
           activeGroup=activeGroup
+          dropTarget=dropTarget
+          groupTarget=groupTarget
         }}
           {{yield (hash
             item=(component 'draggable-list/content' class="dragging" content=itemData)
@@ -30,7 +32,8 @@
             target=(component 'draggable-list/content' class="target" content=(get (get items activeGroup) activeIndex))
           )}}
         </DropTarget>
-      {{else}}
+      {{/each}}
+      {{#if (or (eq groupItems.length 0) (and (eq groupItems.length 1) (eq activeIndex 0) (eq activeGroup groupName) (not-eq groupTarget groupName)))}}
         {{#draggable-list/item
           index=0
           events=events
@@ -43,7 +46,7 @@
           placeholder=(component 'draggable-list/content')
         )}}
         {{/draggable-list/item}}
-      {{/each}}
+      {{/if}}
     {{/each-in}}
     {{#if (not (is-empty activeIndex))}}
       <div
@@ -70,6 +73,7 @@
         index=index
         events=events
         activeIndex=activeIndex
+        dropTarget=dropTarget
       }}
         {{yield (hash
           item=(component 'draggable-list/content' class="dragging" content=itemData)
@@ -88,7 +92,6 @@
         class="draggable-list-item active"
         style={{style}} {{! template-lint-disable no-inline-styles }}
       >
-
         {{yield (hash
           item=(component 'draggable-list/content' class="dragging" content=(get items activeIndex))
         )}}
