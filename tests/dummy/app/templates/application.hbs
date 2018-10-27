@@ -1,7 +1,7 @@
 
 
 {{outlet}}
-<DraggableList style="position:relative;" @onChange={{action "didChange"}} @items={{listItems}} as |list|>
+<DraggableList @onChange={{action "didChange"}} @items={{listItems}} as |list|>
   {{#list.item as |item|}}
     {{item.id}} - {{item.text}}
   {{/list.item}}
@@ -11,7 +11,7 @@
 </DraggableList>
 <p></p>
 
-<DraggableList style="position:relative;" @onChange={{action "didChangeGroup"}} @items={{groupItems}} as |list|>
+<DraggableList @onChange={{action "didChangeGroup"}} @items={{groupItems}} as |list|>
   {{#list.group as |group|}}
     Group {{group}}
   {{/list.group}}

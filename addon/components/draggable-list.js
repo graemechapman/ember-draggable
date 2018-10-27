@@ -212,7 +212,7 @@ export default Component.extend({
 
   style: computed('mouseY', {
     get() {
-      return htmlSafe(`position:absolute;pointer-events:none;top:${this.mouseY - this.elementHeight}px`);
+      return htmlSafe(`top:${this.mouseY - this.elementHeight}px;`);
     }
   })
 });
