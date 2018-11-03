@@ -27,3 +27,13 @@
     {{item.id}} - {{item.text}}
   {{/list.target}}
 </DraggableList>
+
+<p></p>
+
+<DraggableGrid @columns=6 @rows=4 @onChange={{action "didChangeGrid"}} as |grid|>
+  {{#each gridItems as |item index|}}
+    {{#grid.item row=item.row column=item.column height=item.height index=index}}
+      {{item.text}}
+    {{/grid.item}}
+  {{/each}}
+</DraggableGrid>

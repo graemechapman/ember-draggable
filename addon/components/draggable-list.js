@@ -210,7 +210,10 @@ export default Component.extend({
     this.set('mouseY', top);
   },
 
-  style: computed('mouseY', {
+  /**
+   * Style for the element currently being dragged
+   */
+  draggingStyle: computed('mouseY', {
     get() {
       return htmlSafe(`top:${this.mouseY - this.elementHeight}px;`);
     }

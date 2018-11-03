@@ -7,6 +7,10 @@ import { EVENT_ITEM_GRAB, EVENT_ITEM_HOVER } from '../draggable-list';
 export default Component.extend({
   layout,
 
+  classNames: ['draggable-list-item'],
+
+  classNameBindings: ['isDragging:ghost', 'inactive:inactive'],
+
   /**
    * Item index
    * @type {number|null}

@@ -14,6 +14,13 @@ export default Controller.extend({
       { id: 4, text: 'bam' }
     ]);
 
+    this.set('gridItems', [
+      { id: 1, text: 'foo', row: 1, column: 1, height: 1, width: 1 },
+      { id: 2, text: 'bar', row: 3, column: 3, height: 1, width: 1 },
+      { id: 3, text: 'baz', row: 2, column: 2, height: 1, width: 1 },
+      { id: 4, text: 'bam', row: 1, column: 5, height: 1, width: 1 }
+    ]);
+
     this.set('groupItems', {
       asdf: [
         { id: 1, text: 'foo' },
@@ -33,6 +40,9 @@ export default Controller.extend({
     },
     didChangeGroup(items) {
       this.set('groupItems', items);
+    },
+    didChangeGrid(items) {
+      this.set('gridItems', items);
     }
   }
 });

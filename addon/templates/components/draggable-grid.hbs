@@ -1,0 +1,20 @@
+<div class="draggable-grid" style={{style}} ...attributes>
+  {{yield (hash
+      item=(
+        component "draggable-grid/item"
+        events=events
+        activeIndex=activeIndex
+        dropTarget=dropTarget
+      )
+    )}}
+    {{#if (not (is-empty activeIndex))}}
+      <div
+        class="draggable-list-item active"
+        style={{draggingStyle}} {{! template-lint-disable no-inline-styles }}
+      >
+        {{yield (hash
+          item=(component 'draggable-list/content' class="dragging" content=(get items activeIndex))
+        )}}
+      </div>
+    {{/if}}
+</div>

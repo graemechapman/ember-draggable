@@ -51,7 +51,7 @@
     {{#if (not (is-empty activeIndex))}}
       <div
         class="draggable-list-item active"
-        style={{style}} {{! template-lint-disable no-inline-styles }}
+        style={{draggingStyle}} {{! template-lint-disable no-inline-styles }}
       >
         {{yield (hash
           item=(component 'draggable-list/content' class="dragging" content=(get (get items activeGroup) activeIndex))
@@ -90,7 +90,7 @@
     {{#if (not (is-empty activeIndex))}}
       <div
         class="draggable-list-item active"
-        style={{style}} {{! template-lint-disable no-inline-styles }}
+        style={{draggingStyle}} {{! template-lint-disable no-inline-styles }}
       >
         {{yield (hash
           item=(component 'draggable-list/content' class="dragging" content=(get items activeIndex))

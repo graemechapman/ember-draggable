@@ -1,4 +1,4 @@
-.draggable-list {
+.draggable-list, .draggable-grid {
   position: relative;
 }
 .draggable-list .draggable-list-item.active {
@@ -9,4 +9,8 @@
 
 .draggable-list .draggable-list-item.ghost {
   opacity: 0.2;
+}
+
+.draggable-grid {
+  display: grid;
 }
