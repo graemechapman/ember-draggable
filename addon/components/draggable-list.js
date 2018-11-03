@@ -41,22 +41,10 @@ export default Component.extend({
   activeIndex: null,
 
   /**
-   * Active group (if in a grouped list)
-   * @type {string|null}
-   */
-  activeGroup: null,
-
-  /**
    * Index of the current drop target
    * @type {number|null}
    */
   dropTarget: null,
-
-  /**
-   * The current drop target group
-   * @type {string|null}
-   */
-  groupTarget: null,
 
   /**
    * Sets up event listeners
@@ -69,27 +57,21 @@ export default Component.extend({
 
     this.events.on(EVENT_ITEM_DROPPED, () => {
       if (isPresent(this.dropTarget) && isPresent(this.activeIndex)) {
-        if (this.isGroupedList && isPresent(this.groupTarget) && isPresent(this.activeGroup)) {
-          return tryInvoke(this, 'onChange', [this.moveObjectElement(this.items, this.activeIndex, this.activeGroup, this.dropTarget, this.groupTarget)]);
-        }
-
         tryInvoke(this, 'onChange', [this.moveArrayElement(this.items, this.activeIndex, this.dropTarget)]);
       }
 
       this.set('dropTarget', null);
     });
 
-    this.events.on(EVENT_ITEM_HOVER, (dropTarget, groupTarget = null) => {
+    this.events.on(EVENT_ITEM_HOVER, (dropTarget) => {
       this.setProperties({
-        dropTarget,
-        groupTarget
+        dropTarget
       });
     });
 
-    this.events.on(EVENT_ITEM_GRAB, (activeIndex, element, activeGroup = null) => {
+    this.events.on(EVENT_ITEM_GRAB, (activeIndex, element) => {
       this.setProperties({
         activeIndex,
-        activeGroup,
         elementHeight: element.offsetHeight
       });
 
@@ -105,8 +87,6 @@ export default Component.extend({
 
         this.setProperties({
           activeIndex: null,
-          activeGroup: null,
-          groupTarget: null,
           dropTarget: null
         });
 
@@ -133,15 +113,6 @@ export default Component.extend({
   mouseUpListener: null,
 
   /**
-   * Whether the list provided is grouped
-   */
-  isGroupedList: computed('items', {
-    get() {
-      return typeOf(this.items) === 'object';
-    }
-  }),
-
-  /**
    * Returns a new array with a single element moved within that array
    * @param  {array}  array
    * @param  {number} from  index to move from
@@ -159,35 +130,6 @@ export default Component.extend({
     }
 
     return array.insertAt(to, array.splice(from, 1)[0]);
-  },
-
-  /**
-   * Returns a new object with the item from the provided group & key moved to the target group & key
-   * @param  {object} object
-   * @param  {number} from      index to move from
-   * @param  {string} fromGroup group name to move from
-   * @param  {number} to        index to move to
-   * @param  {string} toGroup   group name to move to
-   * @return {object}
-   */
-  moveObjectElement(object, from, fromGroup, to, toGroup) {
-    object = assign({}, object);
-
-    // if it's moving within the same group, just move within that array
-    if (fromGroup === toGroup) {
-      object[fromGroup] = this.moveArrayElement(object[fromGroup], from, to);
-
-      return object;
-    }
-
-    const elementToMove = object[fromGroup][from];
-
-    setProperties(object, {
-      [fromGroup]: [ ...object[fromGroup] ].removeAt(from),
-      [toGroup]: [ ...object[toGroup] ].insertAt(to + 1, elementToMove)
-    });
-
-    return object;
   },
 
   /**

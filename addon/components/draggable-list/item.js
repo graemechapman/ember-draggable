@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import layout from '../../templates/components/draggable-list/item';
 import { computed } from '@ember/object';
 
-import { EVENT_ITEM_GRAB, EVENT_ITEM_HOVER } from '../draggable-list';
+import { EVENT_ITEM_HOVER } from '../draggable-list';
 
 export default Component.extend({
   layout,
@@ -20,18 +20,6 @@ export default Component.extend({
   activeIndex: null,
 
   /**
-   * Item's group (if in a grouped list)
-   * @type {string|null}
-   */
-  group: null,
-
-  /**
-   * Active group (if in a grouped list)
-   * @type {string|null}
-   */
-  activeGroup: null,
-
-  /**
    * Inactive items can't be dragged
    * @type {Boolean}
    */
@@ -44,12 +32,6 @@ export default Component.extend({
   dropTarget: null,
 
   /**
-   * The current drop target group
-   * @type {string|null}
-   */
-  groupTarget: null,
-
-  /**
    * Events property used to communicate with parent component
    * @type {object}
    */
@@ -59,9 +41,9 @@ export default Component.extend({
    * Whether this element is currently being dragged
    * @type {boolean}
    */
-  isDragging: computed('index', 'activeIndex', 'group', 'activeGroup', {
+  isDragging: computed('index', 'activeIndex', {
     get() {
-      return ((this.activeIndex === this.index) && (this.activeGroup === this.group));
+      return (this.activeIndex === this.index);
     }
   }),
 
@@ -73,26 +55,12 @@ export default Component.extend({
   isVisible: computed('isDragging', 'dropTarget', {
     get() {
       if (this.isDragging) {
-        return (this.dropTarget === null || this.dropTarget === this.index && this.groupTarget === this.group);
+        return (this.dropTarget === null || this.dropTarget === this.index);
       }
 
       return true;
     }
   }),
-
-  /**
-   * Starts dragging an element on mouse down.
-   * @param  {MouseEvent} event
-   */
-  mouseDown(event) {
-    if (this.inactive) {
-      return;
-    }
-
-    event.preventDefault();
-
-    this.events.trigger(EVENT_ITEM_GRAB, this.index, this.element, this.group);
-  },
 
   /**
    * Handles mouse events to detect the active drop target.
@@ -106,10 +74,10 @@ export default Component.extend({
     const rect = this.element.getBoundingClientRect();
     const dropIndex = this.index + (((event.clientY - rect.top) > (rect.height / 2)) ? 0 : -1);
 
-    if ((this.group === this.activeGroup) && (this.activeIndex === dropIndex || this.activeIndex === (dropIndex + 1))) {
-      return this.events.trigger(EVENT_ITEM_HOVER, null, this.group);
+    if (this.activeIndex === dropIndex || this.activeIndex === (dropIndex + 1)) {
+      return this.events.trigger(EVENT_ITEM_HOVER, null);
     }
 
-    this.events.trigger(EVENT_ITEM_HOVER, dropIndex, this.group);
+    this.events.trigger(EVENT_ITEM_HOVER, dropIndex);
   }
 });

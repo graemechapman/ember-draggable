@@ -1,101 +1,45 @@
 <div class="draggable-list" ...attributes>
-  {{#if isGroupedList}}
-    {{#each-in @items as |groupName groupItems|}}
-      {{yield (hash
-        group=(component 'draggable-list/content' content=groupName)
-      )}}
+  {{#each @items as |itemData index|}}
+    {{#if (eq index 0)}}
       <DropTarget
-        @isVisible={{and (eq dropTarget -1) (eq groupTarget groupName)}}
-      >
-        {{yield (hash
-          target=(component 'draggable-list/content' class="target" content=(get (get items activeGroup) activeIndex))
-        )}}
-      </DropTarget>
-      {{#each groupItems as |itemData index|}}
-        {{#draggable-list/item
-          index=index
-          events=events
-          activeIndex=activeIndex
-          group=groupName
-          activeGroup=activeGroup
-          dropTarget=dropTarget
-          groupTarget=groupTarget
-        }}
-          {{yield (hash
-            item=(component 'draggable-list/content' class="dragging" content=itemData)
-          )}}
-        {{/draggable-list/item}}
-        <DropTarget
-          @isVisible={{and (eq dropTarget index) (eq groupTarget groupName)}}
-        >
-          {{yield (hash
-            target=(component 'draggable-list/content' class="target" content=(get (get items activeGroup) activeIndex))
-          )}}
-        </DropTarget>
-      {{/each}}
-      {{#if (or (eq groupItems.length 0) (and (eq groupItems.length 1) (eq activeIndex 0) (eq activeGroup groupName) (not-eq groupTarget groupName)))}}
-        {{#draggable-list/item
-          index=0
-          events=events
-          activeIndex=activeIndex
-          group=groupName
-          activeGroup=activeGroup
-          inactive=true
-        }}
-        {{yield (hash
-          placeholder=(component 'draggable-list/content')
-        )}}
-        {{/draggable-list/item}}
-      {{/if}}
-    {{/each-in}}
-    {{#if (not (is-empty activeIndex))}}
-      <div
-        class="draggable-list-item active"
-        style={{style}} {{! template-lint-disable no-inline-styles }}
-      >
-        {{yield (hash
-          item=(component 'draggable-list/content' class="dragging" content=(get (get items activeGroup) activeIndex))
-        )}}
-      </div>
-    {{/if}}
-  {{else}}
-    {{#each @items as |itemData index|}}
-      {{#if (eq index 0)}}
-        <DropTarget
-          @isVisible={{eq dropTarget -1}}
-        >
-          {{yield (hash
-            target=(component 'draggable-list/content' class="target" content=(get (get items activeGroup) activeIndex))
-          )}}
-        </DropTarget>
-      {{/if}}
-      {{#draggable-list/item
-        index=index
-        events=events
-        activeIndex=activeIndex
-        dropTarget=dropTarget
-      }}
-        {{yield (hash
-          item=(component 'draggable-list/content' class="dragging" content=itemData)
-        )}}
-      {{/draggable-list/item}}
-      <DropTarget
-        @isVisible={{eq dropTarget index}}
+        @isVisible={{eq dropTarget -1}}
       >
         {{yield (hash
           target=(component 'draggable-list/content' class="target" content=(get items activeIndex))
         )}}
       </DropTarget>
-    {{/each}}
-    {{#if (not (is-empty activeIndex))}}
-      <div
-        class="draggable-list-item active"
-        style={{style}} {{! template-lint-disable no-inline-styles }}
-      >
-        {{yield (hash
-          item=(component 'draggable-list/content' class="dragging" content=(get items activeIndex))
-        )}}
-      </div>
     {{/if}}
+    {{#draggable-list/item
+      index=index
+      events=events
+      activeIndex=activeIndex
+      dropTarget=dropTarget
+    }}
+      {{yield (hash
+        item=(component 'draggable-list/content' class="dragging" content=itemData)
+        handle=(component 'draggable-list/drag-handle' content=itemData index=index events=events)
+      )}}
+    {{/draggable-list/item}}
+    <DropTarget
+      @isVisible={{eq dropTarget index}}
+    >
+      {{yield (hash
+        target=(component 'draggable-list/content' class="target" content=(get items activeIndex))
+      )}}
+    </DropTarget>
+  {{else}}
+    {{yield (hash
+      placeholder=(component 'draggable-list/content')
+    )}}
+  {{/each}}
+  {{#if (not (is-empty activeIndex))}}
+    <div
+      class="draggable-list-item active"
+      style={{style}} {{! template-lint-disable no-inline-styles }}
+    >
+      {{yield (hash
+        item=(component 'draggable-list/content' class="dragging" content=(get items activeIndex))
+      )}}
+    </div>
   {{/if}}
 </div>

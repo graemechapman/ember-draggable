@@ -14,17 +14,26 @@ export default Controller.extend({
       { id: 4, text: 'bam' }
     ]);
 
-    this.set('groupItems', {
-      asdf: [
-        { id: 1, text: 'foo' },
-        { id: 2, text: 'bar' }
-      ],
-      ghjk: [
-        { id: 3, text: 'baz' },
-        { id: 4, text: 'bam' }
-      ],
-      qwerty: []
-    });
+    this.set('groupItems', [
+      {
+        text: 'asdf',
+      itemsitems: [
+          { id: 1, text: 'foo' },
+          { id: 2, text: 'bar' }
+        ]
+      },
+      {
+        text: 'ghjk',
+        items: [
+          { id: 3, text: 'baz' },
+          { id: 4, text: 'bam' }
+        ],
+      },
+      {
+        text: 'qwerty',
+        items: []
+      }
+    ]);
   },
 
   actions: {

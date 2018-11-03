@@ -1,0 +1,1 @@
+export { default } from 'ember-draggable/components/draggable-list/drag-handle';

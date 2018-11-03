@@ -1,0 +1,12 @@
+.draggable-list {
+  position: relative;
+}
+.draggable-list .draggable-list-item.active {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.draggable-list .draggable-list-item.ghost {
+  opacity: 0.2;
+}
