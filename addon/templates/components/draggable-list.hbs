@@ -2,29 +2,32 @@
   {{#each @items as |itemData index|}}
     {{#if (eq index 0)}}
       <DropTarget
-        @isVisible={{eq dropTarget -1}}
+        @isVisible={{and (eq dropTarget -1) (eq group dropGroup)}}
       >
         {{yield (hash
-          target=(component 'draggable-list/content' class="target" content=(get items activeIndex))
+          target=(component 'draggable-list/content' class="target" content=activeItem)
         )}}
       </DropTarget>
     {{/if}}
     {{#draggable-list/item
       index=index
+      group=group
       events=events
       activeIndex=activeIndex
+      activeGroup=activeGroup
       dropTarget=dropTarget
+      dropGroup=dropGroup
     }}
       {{yield (hash
         item=(component 'draggable-list/content' class="dragging" content=itemData)
-        handle=(component 'draggable-list/drag-handle' content=itemData index=index events=events)
+        handle=(component 'draggable-list/drag-handle' content=itemData index=index group=group events=events)
       )}}
     {{/draggable-list/item}}
     <DropTarget
-      @isVisible={{eq dropTarget index}}
+      @isVisible={{and (eq dropTarget index) (eq group dropGroup)}}
     >
       {{yield (hash
-        target=(component 'draggable-list/content' class="target" content=(get items activeIndex))
+        target=(component 'draggable-list/content' class="target" content=activeItem)
       )}}
     </DropTarget>
   {{else}}
@@ -32,13 +35,13 @@
       placeholder=(component 'draggable-list/content')
     )}}
   {{/each}}
-  {{#if (not (is-empty activeIndex))}}
+  {{#if (and (not (is-empty activeIndex)) (eq group activeGroup))}}
     <div
       class="draggable-list-item active"
       style={{style}} {{! template-lint-disable no-inline-styles }}
     >
       {{yield (hash
-        item=(component 'draggable-list/content' class="dragging" content=(get items activeIndex))
+        item=(component 'draggable-list/content' class="dragging" content=activeItem)
       )}}
     </div>
   {{/if}}

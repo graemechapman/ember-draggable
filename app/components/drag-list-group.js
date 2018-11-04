@@ -1,0 +1,1 @@
+export { default } from 'ember-draggable/components/drag-list-group';

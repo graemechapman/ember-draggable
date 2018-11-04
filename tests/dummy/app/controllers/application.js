@@ -17,7 +17,7 @@ export default Controller.extend({
     this.set('groupItems', [
       {
         text: 'asdf',
-      itemsitems: [
+        items: [
           { id: 1, text: 'foo' },
           { id: 2, text: 'bar' }
         ]
@@ -40,8 +40,9 @@ export default Controller.extend({
     didChange(items) {
       return this.set('listItems', items);
     },
-    didChangeGroup(items) {
-      this.set('groupItems', items);
+    didChangeGroup(items, stuff) {
+      console.log(items, stuff);
+      // this.set('groupItems', items);
     }
   }
 });

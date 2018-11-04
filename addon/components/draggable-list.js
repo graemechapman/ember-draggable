@@ -4,10 +4,9 @@ import Evented from '@ember/object/evented';
 import EmberObject from '@ember/object';
 
 import { htmlSafe } from '@ember/template';
-import { computed, setProperties } from '@ember/object';
+import { computed } from '@ember/object';
 
-import { isPresent, typeOf, tryInvoke } from '@ember/utils';
-import { assign } from '@ember/polyfills';
+import { isPresent, tryInvoke } from '@ember/utils';
 
 export const EVENT_ITEM_DROPPED = Symbol('item dropped');
 export const EVENT_ITEM_HOVER = Symbol('item hovered');
@@ -35,6 +34,12 @@ export default Component.extend({
   mouseY: null,
 
   /**
+   * X coordinates of the mouse cursor
+   * @type {number|null}
+   */
+  mouseX: null,
+
+  /**
    * Index of the currently active item
    * @type {number|null}
    */
@@ -47,11 +52,26 @@ export default Component.extend({
   dropTarget: null,
 
   /**
+   * Whether to allow dragging elements outside the container
+   * @type {Boolean}
+   */
+  isGrouped: false,
+
+  elementHeight: null,
+
+  elementWidth: null,
+
+  /**
    * Sets up event listeners
    * @override
    */
   init() {
     this._super(...arguments);
+
+    //grouped elements pass in their own evented so it can be shared
+    if (this.isGrouped) {
+      return;
+    }
 
     this.set('events', EmberObject.extend(Evented).create());
 
@@ -60,19 +80,25 @@ export default Component.extend({
         tryInvoke(this, 'onChange', [this.moveArrayElement(this.items, this.activeIndex, this.dropTarget)]);
       }
 
-      this.set('dropTarget', null);
-    });
-
-    this.events.on(EVENT_ITEM_HOVER, (dropTarget) => {
       this.setProperties({
-        dropTarget
+        dropTarget: null,
+        dropGroup: null
       });
     });
 
-    this.events.on(EVENT_ITEM_GRAB, (activeIndex, element) => {
+    this.events.on(EVENT_ITEM_HOVER, (dropTarget, dropGroup) => {
+      this.setProperties({
+        dropTarget,
+        dropGroup
+      });
+    });
+
+    this.events.on(EVENT_ITEM_GRAB, ([activeIndex], activeItem, element) => {
       this.setProperties({
         activeIndex,
-        elementHeight: element.offsetHeight
+        activeItem,
+        elementHeight: element.offsetHeight,
+        elementWidth: element.offsetWidth
       });
 
       // add event listener on the whole document, this stops the component bugging out if mouse is moved outside the element
@@ -87,7 +113,8 @@ export default Component.extend({
 
         this.setProperties({
           activeIndex: null,
-          dropTarget: null
+          dropTarget: null,
+          dropGroup: null
         });
 
         document.removeEventListener('mouseup', this.mouseUpListener);
@@ -137,9 +164,14 @@ export default Component.extend({
    * @param  {MouseEvent} event
    */
   mouseMove(event) {
+    if (this.isGrouped) {
+      return true;
+    }
+
     const rect = this.element.getBoundingClientRect();
 
     let top = event.clientY - rect.top;
+    let left = event.clientX - rect.left;
 
     if (top < 0) {
       top = 0;
@@ -149,12 +181,25 @@ export default Component.extend({
       top = rect.height;
     }
 
-    this.set('mouseY', top);
+    this.setProperties({
+      mouseY: top,
+      mouseX: left
+    });
   },
 
-  style: computed('mouseY', {
+  /**
+   * Style to show on the element being dragged to allow it to follow the mouse
+   *
+   * @type string
+   */
+  style: computed('mouseY', 'mouseX', 'isGrouped', {
     get() {
-      return htmlSafe(`position:absolute;pointer-events:none;top:${this.mouseY - this.elementHeight}px`);
+      const style = `position:absolute;pointer-events:none;top:${this.mouseY - this.elementHeight}px;`;
+
+      if (this.isGrouped) {
+        return htmlSafe(`${style}left:${this.mouseX - this.elementWidth}px;`);
+      }
+      return htmlSafe(style);
     }
   })
 });

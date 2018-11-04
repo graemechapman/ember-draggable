@@ -43,7 +43,7 @@ export default Component.extend({
    */
   isDragging: computed('index', 'activeIndex', {
     get() {
-      return (this.activeIndex === this.index);
+      return (this.activeIndex === this.index) && (this.activeGroup === this.group);
     }
   }),
 
@@ -74,10 +74,10 @@ export default Component.extend({
     const rect = this.element.getBoundingClientRect();
     const dropIndex = this.index + (((event.clientY - rect.top) > (rect.height / 2)) ? 0 : -1);
 
-    if (this.activeIndex === dropIndex || this.activeIndex === (dropIndex + 1)) {
+    if ((this.activeGroup === this.group) && (this.activeIndex === dropIndex || this.activeIndex === (dropIndex + 1))) {
       return this.events.trigger(EVENT_ITEM_HOVER, null);
     }
 
-    this.events.trigger(EVENT_ITEM_HOVER, dropIndex);
+    this.events.trigger(EVENT_ITEM_HOVER, dropIndex, this.group);
   }
 });

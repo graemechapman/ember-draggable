@@ -12,11 +12,14 @@ export default Component.extend({
    */
   index: null,
 
+  group: null,
+
   /**
    * Events property used to communicate with parent component
    * @type {object}
    */
   events: null,
+  item: null,
 
   /**
    * Starts dragging an element on mouse down.
@@ -25,6 +28,6 @@ export default Component.extend({
   mouseDown(event) {
     event.preventDefault();
 
-    this.events.trigger(EVENT_ITEM_GRAB, this.index, this.element);
+    this.events.trigger(EVENT_ITEM_GRAB, [this.index, this.group], this.content, this.element);
   }
 });
