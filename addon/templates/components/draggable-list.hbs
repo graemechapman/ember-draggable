@@ -31,9 +31,19 @@
       )}}
     </DropTarget>
   {{else}}
-    {{yield (hash
-      placeholder=(component 'draggable-list/content')
-    )}}
+    {{#draggable-list/item
+      index=0
+      group=group
+      events=events
+      activeIndex=activeIndex
+      activeGroup=activeGroup
+      dropTarget=dropTarget
+      dropGroup=dropGroup
+    }}
+      {{yield (hash
+        placeholder=(component 'draggable-list/content')
+      )}}
+    {{/draggable-list/item}}
   {{/each}}
   {{#if (and (not (is-empty activeIndex)) (eq group activeGroup))}}
     <div

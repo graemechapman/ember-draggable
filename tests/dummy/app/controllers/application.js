@@ -1,5 +1,7 @@
 import Controller from '@ember/controller';
 
+import { moveArrayElement, moveObjectElement } from 'ember-draggable/utils/draggable';
+
 export default Controller.extend({
   listItems: null,
   groupItems: null,
@@ -14,35 +16,30 @@ export default Controller.extend({
       { id: 4, text: 'bam' }
     ]);
 
-    this.set('groupItems', [
-      {
-        text: 'asdf',
-        items: [
-          { id: 1, text: 'foo' },
-          { id: 2, text: 'bar' }
-        ]
-      },
-      {
-        text: 'ghjk',
-        items: [
-          { id: 3, text: 'baz' },
-          { id: 4, text: 'bam' }
-        ],
-      },
-      {
-        text: 'qwerty',
-        items: []
-      }
-    ]);
+    this.set('groupItems', {
+      Lepismidae: [
+        { id: 1, text: 'takar' },
+        { id: 2, text: 'nosology' }
+      ],
+      panhandle: [
+        { id: 1, text: 'casiri' },
+        { id: 2, text: 'Guadagnini' }
+      ],
+      lunare: [
+        { id: 1, text: 'terminatory' },
+        { id: 2, text: 'semifunctional' }
+      ],
+      taxinomist: []
+    });
   },
 
   actions: {
-    didChange(items) {
-      return this.set('listItems', items);
+    didChange([from], [to]) {
+      this.set('listItems', moveArrayElement(this.listItems, from, to));
     },
-    didChangeGroup(items, stuff) {
-      console.log(items, stuff);
-      // this.set('groupItems', items);
+
+    didChangeGroup(from, to) {
+      this.set('groupItems', moveObjectElement(this.groupItems, from, to));
     }
   }
 });

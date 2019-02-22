@@ -14,10 +14,10 @@
 </DraggableList>
 <p></p>
 
-<DragListGroup as |group|>
-  {{#each groupItems as |items|}}
-    {{items.text}}
-    {{#group.list items=items.items group=items.text as |list|}}
+<DragListGroup @onChange={{action "didChangeGroup"}} as |group|>
+  {{#each-in groupItems as |label items|}}
+    {{label}}
+    {{#group.list items=items group=label as |list|}}
       {{#list.placeholder class="placeholder"}}
         No Data...
       {{/list.placeholder}}
@@ -31,7 +31,7 @@
         {{item.id}} - {{item.text}}
       {{/list.target}}
     {{/group.list}}
-  {{/each}}
+  {{/each-in}}
 </DragListGroup>
 <p></p>
 {{!--

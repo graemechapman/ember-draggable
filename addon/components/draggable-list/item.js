@@ -2,7 +2,7 @@ import Component from '@ember/component';
 import layout from '../../templates/components/draggable-list/item';
 import { computed } from '@ember/object';
 
-import { EVENT_ITEM_HOVER } from '../draggable-list';
+import { EVENT_ITEM_HOVER } from '../../mixins/draggable-container';
 
 export default Component.extend({
   layout,

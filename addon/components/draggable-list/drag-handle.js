@@ -1,7 +1,7 @@
 import Component from '@ember/component';
 import layout from '../../templates/components/draggable-list/drag-handle';
 
-import { EVENT_ITEM_GRAB } from '../draggable-list';
+import { EVENT_ITEM_GRAB } from '../../mixins/draggable-container';
 
 export default Component.extend({
   layout,
